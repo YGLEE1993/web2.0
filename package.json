@@ -1,0 +1,24 @@
+{
+  "name": "web3.0",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YGLEE1993/web3.0.git"
+  },
+  "author": "Yugyeong YG Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YGLEE1993/web3.0/issues"
+  },
+  "homepage": "https://github.com/YGLEE1993/web3.0#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
