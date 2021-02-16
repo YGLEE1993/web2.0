@@ -9,9 +9,10 @@
 /coverage
 
 # # production
-# /build
+/build
 
 # misc
+config.js
 .DS_Store
 .env.local
 .env.development.local
