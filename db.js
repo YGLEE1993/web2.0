@@ -1,11 +1,12 @@
 const mysql = require('mysql');
-const config  = require('./config')
+const config  = require('./config');
 const db_config = {
     host: config.MYSQL_HOST,
     user: config.MYSQL_USER,
     password: config.MYSQL_PASSWORD,
     database: config.MYSQL_DATABASE
 }
+
 
 var connection;
 
