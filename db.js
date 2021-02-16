@@ -7,7 +7,6 @@ const db_config = {
     database: config.MYSQL_DATABASE
 }
 
-
 var connection;
 
 const handleDisconnect = () => {
