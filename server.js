@@ -108,6 +108,14 @@ app.get('/success', (req, res) => {
             console.log(payment)
         }
     });
+
+    /* Delete all mysql users */ 
+    if(winner is picked)
+    {
+        var deleted = await delete_user();
+    }
+  
+
     res.redirect('http://localhost:3000')
 });
 
@@ -134,9 +142,8 @@ app.get('/pick_winner', async (req, res) => {
     });
     console.log(email_array)
 
-    const winner = email_array[Math.floor(Math.random() * email_array.length)];
-    console.log(winner)
-    return true;
+    const winner_email = email_array[Math.floor(Math.random() * email_array.length)];
+    console.log(winner_email)
 
     /* Create paypal payment */
     var create_payment_json = {
@@ -163,7 +170,7 @@ app.get('/pick_winner', async (req, res) => {
                 "total": req.session.paypal_amount
             },
             'payee': {
-                'email': winner
+                'email': winner_email
             },
             "description": "Paying the winner of the lottery application"
         }]
