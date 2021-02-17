@@ -5,7 +5,14 @@ const { save_user_information, get_total_amount } = require("./models/server-db"
 const path = require('path');
 const publicPath = path.join(__dirname, './public');
 const paypal = require('paypal-rest-sdk');
+const session = require('express-session');
 
+app.use(session (
+    {
+    secret: 'my decentralize app',
+    cookie : {maxAge: 60000}
+    }
+))
 /* handling all the parsing */
 app.use(bodyParser.json());
 app.use(express.static(publicPath))
