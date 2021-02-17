@@ -35,7 +35,8 @@ app.post('/post_info', async (req, res) => {
         return res.send(return_info);
     }
     var fee_amount = amount * 0.9;
-    var result = await save_user_information({"amount" : fee_amount, "email": email});
+    var result = await save_user_information({"amount" : fee_amount, "email": email}); //save to DB
+    req.session.paypal_amount = amount;
 
     /* Invoke paypal rest api */
     var create_payment_json = {
@@ -94,7 +95,7 @@ app.get('/success', (req, res) => {
         "transactions": [{
             "amount" : {
                 "currency" : "USD",
-                "total": 100
+                "total": req.session.paypal_amount 
             }
         }]
     };
@@ -114,6 +115,71 @@ app.get('/get_total_amount', async (req, res) => {
     const result = await get_total_amount();
     res.send(result)
 })
+
+app.get('/pick_winner', async (req, res) => {
+    const result = await get_total_amount();
+    const total_amount = result[0].total_amount;
+    req.session.paypal_amount = total_amount;
+    
+    /* Placeholder for picking the winner
+    1) query to get a list of all the participants 
+    2) pick a winner */
+
+
+    /* Create paypal payment */
+
+    var create_payment_json = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://localhost:3000/success",
+            "cancel_url": "http://localhost:3000/cancel"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": "Lottery",
+                    "sku": "Funding",
+                    "price": req.session.paypal_amount,
+                    "currency": "USD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "currency": "USD",
+                "total": req.session.paypal_amount
+            },
+            'payee': {
+                'email': winner_email
+            },
+            "description": "Paying the winner of the lottery application"
+        }]
+    };
+
+    paypal.payment.create(create_payment_json, function (error, payment) {
+        if (error) {
+            throw error;
+        } else {
+            console.log("Create Payment Response");
+            console.log(payment);
+            for(var i=0; i < payment.links.length; i++){
+                console.log(payment.links[i].rel)
+                if(payment.links[i].rel == 'approval_url'){
+                    return res.send(payment.links[i].href); //redirect user 
+                }
+            }
+        }
+    });
+
+
+});
+
+
+
+
+
 
 app.listen(3000, () => {
     console.log("server is running on port 3000!")
