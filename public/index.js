@@ -1,19 +1,20 @@
 function App() {
     const [totalAmount, setTotalAmount] = React.useState("1000");
-    const [amount, setAmount] = React.useState('100');
+    const [amount, setAmount] = React.useState('5000');
     const [email, setEmail] = React.useState('');
 
     React.useEffect(async () => {
         const result = await axios.get('get_total_amount');
         setTotalAmount(result.data["0"].total_amount)
     }, [])
+    
     const onSubmit = async (e) => {
         e.preventDefault();
         const response = await axios.post('/post_info', {
             amount: amount,
             email: email,
         })
-        console.log(response)
+        window.location.href = response.data;
     }
 
   return (
