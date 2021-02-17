@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser'); 
-const { save_user_information, get_total_amount, get_list_of_participants } = require("./models/server-db");
+const { save_user_information, get_total_amount, get_list_of_participants,  delete_user} = require("./models/server-db");
 const path = require('path');
 const publicPath = path.join(__dirname, './public');
 const paypal = require('paypal-rest-sdk');
@@ -110,12 +110,10 @@ app.get('/success', (req, res) => {
     });
 
     /* Delete all mysql users */ 
-    if(winner is picked)
-    {
-        var deleted = await delete_user();
+    if(req.session.winner_picked){
+        var deleted = delete_user();
     }
-  
-
+    req.session.winner_picked = false;
     res.redirect('http://localhost:3000')
 });
 
@@ -143,6 +141,7 @@ app.get('/pick_winner', async (req, res) => {
     console.log(email_array)
 
     const winner_email = email_array[Math.floor(Math.random() * email_array.length)];
+    req.session.winner_picked = true;
     console.log(winner_email)
 
     /* Create paypal payment */
@@ -185,7 +184,7 @@ app.get('/pick_winner', async (req, res) => {
             for(var i=0; i < payment.links.length; i++){
                 console.log(payment.links[i].rel)
                 if(payment.links[i].rel == 'approval_url'){
-                    return res.send(payment.links[i].href); //redirect user 
+                    return res.redirect(payment.links[i].href); //redirect user 
                 }
             }
         }

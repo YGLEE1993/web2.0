@@ -28,8 +28,17 @@ get_list_of_participants = (data) => new Promise((resolve, reject)=>{
     })
 })
 
+delete_user = (data) => new Promise((resolve, reject) => {
+    db.query('DELETE FROM lottery_information WHERE ID > 0', null, function(err, results, fields){
+        if(err){
+            reject('Could not delete all users');
+        }
+        resolve("Success on deleting all users");
+    })
+})
 module.exports = {
     save_user_information,
     get_total_amount,
-    get_list_of_participants
+    get_list_of_participants,
+    delete_user
 }
